@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <script type="text/javascript" src="external/jquery-1.8.3.min.js"></script>
+        <script type="text/javascript" src="external/underscore.js"></script>
+        <script type="text/javascript" src="../src/scripts/scrollr.js"></script>
+        
+        <style>
+            #first{
+                position: relative;
+                height: 1000px;
+                background-color: #000000;
+            }
+            
+            #first .spin{
+                position: relative;
+                top: 400px;
+                left: 400px;
+                height: 100px;
+                width: 100px;
+                background-image: url('rosie.jpg');
+                background-color: blue;
+                transform: rotate(0deg);
+                -webkit-transform: rotate(0deg);
+            }
+            
+            #first .blur{
+                position: relative;
+                top: 300px;
+                display: none;
+                color: rgba(255, 255, 255, 0);
+                text-shadow: 0 0 5px rgba(16,16,16,0.5);
+                font-size: 36px;
+            }
+            
+            #first .text{
+                position: absolute;
+                left: 400px;
+                top: 85%;
+                font-size: 125px;
+                color: rgba(255, 255, 255, 0);
+                text-shadow: 0 0 5px rgba(0,0,0,0.5);
+            }
+            
+            #second{
+                height: 1000px;
+                position: relative;
+                background-image: url(wood.jpg);
+                background-repeat: repeat;
+                background-attachment:fixed;
+            }
+            
+            #second .parallax-wrapper{
+                position: relative;
+                left: 900px;
+                top: 475px;
+            }
+            #second .parallax-wrapper .parallax-me{
+                position: relative;
+                height: 50px;
+                width: 50px;
+                background-color: red;
+            }
+
+            
+            #third{
+                height: 1000px;
+            }
+            
+            #third .waypoint-slide{
+                 width: 100%;
+                 height: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="first" style="">
+            <div class="spin"></div>
+            <div class="blur">Reveal</div>
+            <div class="text">REVEAL</div>
+        </div>
+        <div id="second">
+            <div class="parallax-wrapper">
+                <div class="parallax-inner">
+                    <div class="parallax-me"></div>
+                </div>
+            </div>
+        </div>
+        <div id="third">
+            <img class="waypoint-slide" src="Desert.jpg" style="display:none;"/>
+        </div>
+        
+        <script type="text/javascript">
+            var colorChanger = new scrollr.Tween({
+               $el: $('#first'),
+               start: 0,
+               end: $('#second'),
+               easing: 'easeInCubic',
+               styles: {
+                   'background-color': '#ffffff'
+               }
+            });
+            
+            var rotator = new scrollr.Tween({
+               $el: $('#first .spin'),
+               start: 0,
+               end: $('#second'),
+               styles: {
+                   'transform': {startValue: 'rotate(0deg)', 'endValue': 'rotate(360deg)'}
+               }
+            });
+            
+            var textChanger = new scrollr.Tween({
+               $el: $('#first .blur'),
+               start: 0,
+               end: $('#second'),
+               styles: {
+                   'color': 'rgba(255, 255, 255, 0.0)',
+                   'text-shadow': 'rgba(255, 255, 255, 0.5)'
+               }
+            });
+            
+            $('.parallax-me').parallax({speed: 0.5});
+            
+            var slider = new scrollr.Waypoint({
+               $el: $('body'),
+               position: function(){
+                 return $('#third').position().top - $(window).height()/2;  
+               },
+               down: function(){
+                   var img = $('#third img');
+                   img.hide().height($(window).height()).width($(window).width()).slideDown();
+               },
+               up: function(){
+                   var img = $('#third img');
+                   img.slideUp();
+               }
+            });
+            //$('#second').parallax({speed: 1, attr: 'background-position-y'});
+        </script>
+    </body>
+</html>
