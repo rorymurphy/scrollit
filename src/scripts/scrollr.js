@@ -408,17 +408,17 @@
             if(_.isNumber(options)){
                 result = _.partial(offsetTopFunc, $el, options);
             }else if(_.isObject(options) && _.has(options, 'top')){
-                result = _partial(offsetTopFunc, $el, options.top);
+                result = _.partial(offsetTopFunc, $el, options.top);
             }else if(_.isObject(options) && _.has(options, 'bottom')){
-                result = _partial(offsetBottomFunc, $el, options.bottom);
+                result = _.partial(offsetBottomFunc, $el, options.bottom);
             }else{ result = _.partial(offsetTopFunc, $el, 0); }
         }else{
             if(_.isNumber(options)){
                 result = _.partial(offsetLeftFunc, $el, options);
             }else if(_.isObject(options) && _.has(options, 'left')){
-                result = _partial(offsetLeftFunc, $el, options.left);
+                result = _.partial(offsetLeftFunc, $el, options.left);
             }else if(_.isObject(options) && _.has(options, 'right')){
-                result = _partial(offsetRightFunc, $el, options.bottom);
+                result = _.partial(offsetRightFunc, $el, options.bottom);
             }else{ result = _.partial(offsetLeftFunc, $el, 0); }            
         }
         return result;
