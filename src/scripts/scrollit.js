@@ -607,7 +607,7 @@
 
         _.defaults(options, defaults);
         if(options.$el === null){
-            throw "Must specify an element or elements to tween";
+            throw "Must specify an element or elements to parallax";
         }
 
         var $el = options.$el = $(options.$el);
