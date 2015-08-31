@@ -1,19 +1,90 @@
 (function (root, factory) {
     if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module.
-        define('scrollr', ['jquery'], function ($) {
+        define('scrollit', ['jquery'], function ($) {
             // Also create a global in case some scripts
             // that are loaded still are looking for
             // a global even when an AMD loader is in use.
-            return (root.scrollr = factory($));
+            return (root.scrollit = factory($));
         });
     } else {
         // Browser globals
-        root.scrollr = factory(root.jQuery);
+        root.scrollit = factory(root.jQuery);
     }
 }(this, function ($) {
     var exports = {};
-    
+
+    //BEGIN imported underscore functions
+    var _ = {};
+    _.has = Object.prototype.hasOwnProperty;
+    slice = Array.prototype.slice;
+    var hasEnumBug = !{toString: null}.propertyIsEnumerable('toString');
+
+    _.allKeys = function(obj) {
+      if (!_.isObject(obj)) return [];
+      var keys = [];
+      for (var key in obj) keys.push(key);
+      if (hasEnumBug) collectNonEnumProps(obj, keys);
+      return keys;
+    };
+
+    var createAssigner = function(keysFunc, undefinedOnly) {
+      return function(obj) {
+        var length = arguments.length;
+        if (length < 2 || obj == null) return obj;
+        for (var index = 1; index < length; index++) {
+          var source = arguments[index],
+              keys = keysFunc(source),
+              l = keys.length;
+          for (var i = 0; i < l; i++) {
+            var key = keys[i];
+            if (!undefinedOnly || obj[key] === void 0) obj[key] = source[key];
+          }
+        }
+        return obj;
+      };
+    };
+    _.defaults = createAssigner(_.allKeys, true);
+
+    _.isObject = function(obj) {
+      var type = typeof obj;
+      return type === 'function' || type === 'object' && !!obj;
+    };
+
+    var oTypes = ['Arguments', 'Function', 'String', 'Number', 'Date', 'RegExp', 'Error'];
+    for(var i = 0; i < oTypes.length; i++){
+      var name = oTypes[i];
+      var callback = function(name){
+        return function(obj) {
+          return toString.call(obj) === '[object ' + name + ']';
+        };
+      };
+      _['is' + name] = callback.call(this, name);
+    };
+
+    var executeBound = function(sourceFunc, boundFunc, context, callingContext, args) {
+      if (!(callingContext instanceof boundFunc)) return sourceFunc.apply(context, args);
+      var self = baseCreate(sourceFunc.prototype);
+      var result = sourceFunc.apply(self, args);
+      if (_.isObject(result)) return result;
+      return self;
+    };
+
+    _.partial = function(func) {
+      var boundArgs = slice.call(arguments, 1);
+      var bound = function() {
+        var position = 0, length = boundArgs.length;
+        var args = Array(length);
+        for (var i = 0; i < length; i++) {
+          args[i] = boundArgs[i] === _ ? arguments[position++] : boundArgs[i];
+        }
+        while (position < arguments.length) args.push(arguments[position++]);
+        return executeBound(func, bound, this, this, args);
+      };
+      return bound;
+    };
+    // End imported underscore functions
+
     //
     //  scrollParent from jQuery UI
     //
@@ -30,7 +101,7 @@
 
         return position === "fixed" || !scrollParent.length ? $( this[ 0 ].ownerDocument || document ) : scrollParent;
     };
-    
+
     //
     // Easings courtesy of jQuery UI
     var baseEasings = {};
@@ -233,7 +304,7 @@
 
         return [r * 255, g * 255, b * 255];
     }
-    
+
     /**
     * Converts an RGB color value to HSL. Conversion formula
     * adapted from http://en.wikipedia.org/wiki/HSL_color_space.
@@ -268,14 +339,14 @@
 
     var color = function(options){
         var t = this;
-        
+
         _.defaults(options, {
             'a': 1.0
         });
         if(typeof options.r !== 'undefined'
             && typeof options.g !== 'undefined'
             && typeof options.b !== 'undefined'){
-            
+
             options.type = 'rgb';
             var hsl = rgbToHsl(options.r, options.g, options.b);
             options.h = hsl[0] * 360;
@@ -284,14 +355,14 @@
         } else if( typeof options.h !== 'undefined'
             && typeof options.s  !== 'undefined'
             && typeof options.l  !== 'undefined'){
-        
+
             options.type = 'hsl';
             var rgb = hslToRgb(options.h / 360, options.s / 100, options.l / 100);
             options.r = rgb[0];
             options.g = rgb[1];
             options.b = rgb[2];
         }
-        
+
         t.r = function(){ return options.r; };
         t.g = function(){ return options.g; };
         t.b = function(){ return options.b; };
@@ -299,7 +370,7 @@
         t.s = function(){ return options.s; };
         t.l = function(){ return options.l; };
         t.a = function(){ return options.a; };
-        
+
         t.mix = function(c, percent){
             var perComp = 1.0 - percent; //percent complement
             if(options.type === 'rgb'){
@@ -314,19 +385,19 @@
                    h: perComp * options.h + percent * c.h(),
                    s: perComp * options.s + percent * c.s(),
                    l: perComp * options.l + percent * c.l(),
-                   a: perComp * options.a + percent * c.a()                    
+                   a: perComp * options.a + percent * c.a()
                 });
             }
         };
-        
+
         t.toString = function(){
             var t=this;
             return stringFormat('rgba({0}, {1}, {2}, {3})', Math.round(options.r), Math.round(options.g), Math.round(options.b), options.a);
         }
-        
+
     };
 
-   
+
     var hexRegex = /^\s*#([A-Fa-f0-0]{3}|[A-Fa-f0-0]{6})/;
     var rgbRegex = /^\s*rgb\s*\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)/;
     var rgbaRegex = /^\s*rgba\s*\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d\.\d+|\d|\.\d+)\s*\)/;
@@ -345,13 +416,13 @@
         if(matches != null){ return new color({h: matches[1], s: matches[2], l: matches[3], a: matches[4]}); }
         return undefined;
     }
-    
+
     var numericExpression = function(options){
         var t = this;
-        
+
         t.formatString = function(){ return options.formatString; }
         t.values = function(){ return options.values; }
-        
+
         t.mix = function(exp, percent){
             var perComp = 1.0 - percent;
             var args = exp.values();
@@ -365,12 +436,12 @@
             };
             return new numericExpression(opts);
         };
-        
+
         t.toString = function(){
             return stringFormat.apply(this, [options.formatString].concat(options.values));
         };
     }
-    
+
     function parseAttributeNumeric(val){
         var counter = 0;
         var args = {};
@@ -381,7 +452,7 @@
         });
         return new numericExpression(args);
     }
-    
+
     function parseAttribute(val){
         var result = parseAttributeColor(val);
         if(!result){
@@ -389,7 +460,7 @@
         }
         return result;
     }
-    
+
     // So this is where the magic happens - there are several different options
     // for what parameters are passed in, and this turns any of them into a
     // function that will return an offset.
@@ -398,12 +469,12 @@
         var offsetBottomFunc = function($el, offset){ return ($el.get(0) === document ? 0 : $el.offset().top) + $el.height() + offset; };
         var offsetLeftFunc = function($el, offset){ return ($el.get(0) === document ? 0 : $el.offset().left) + offset; };
         var offsetRightFunc = function($el, offset){ return ($el.get(0) === document ? 0 : $el.offset().left) + $el.width() + offset; };
-        
+
         var $el, result;
         if(options instanceof $){ $el = options; }
         else if(_.isObject(options) && options.$el){ $el = options.$el; }
         else { $el = scrollParent; }
-        
+
         if(axis === 'y'){
             if(_.isNumber(options)){
                 result = _.partial(offsetTopFunc, $el, options);
@@ -419,11 +490,11 @@
                 result = _.partial(offsetLeftFunc, $el, options.left);
             }else if(_.isObject(options) && _.has(options, 'right')){
                 result = _.partial(offsetRightFunc, $el, options.bottom);
-            }else{ result = _.partial(offsetLeftFunc, $el, 0); }            
+            }else{ result = _.partial(offsetLeftFunc, $el, 0); }
         }
         return result;
     }
-    
+
     exports.Tween = function(options){
         var t = this;
         var defaults = {
@@ -453,43 +524,45 @@
             options.scrollParent = $el.scrollParent();
         }
         options.$scrollParent = $(options.scrollParent);
-        
+
         options.start = _.isFunction(options.start) ? options.start : makeOffsetFunction(options.axis, options.$scrollParent, options.start);
         options.end = _.isFunction(options.end) ? options.end : makeOffsetFunction(options.axis, options.$scrollParent, options.end);
-        
-        _.each(options.styles, function(val, key){
-            var style = val;
-            if(_.isString(val)){
-                style = { endValue: val };
-            }
-            style = _.defaults(style, {
-                startValue: null,
-                endValue: null
-            });
-            //var dummy = $('<div style="position: fixed; left: 10000px;"></div>').appendTo('body');
-            if(style.startValue){
-                //Write to a fake element and read back because some browsers actually change the format.
-                //for example Chrome changes rotateX and rotateY into a transformation matrix.
-                //style.startValue = dummy.css(key, style.startValue).css(key);
-                // ^ Nevermind, it was screwing up rotation, as rotate(360) === rotate(0) when you get the matrix transform.
-                style.startValue = parseAttribute(style.startValue);
-            }
-            if(style.endValue){
-                //Write to a fake element and read back because some browsers actually change the format.
-                //for example Chrome changes rotateX and rotateY into a transformation matrix.
-                //style.endValue = dummy.css(key, style.endValue).css(key);
-                // ^ Nevermind, it was screwing up rotation, as rotate(360) === rotate(0) when you get the matrix transform.
-                style.endValue = parseAttribute(style.endValue);
-            }
-            //dummy.remove();
-            options.styles[key] = style;
-        });
- 
+        options.easing = _.isFunction(options.easing) ? options.easing : exports.easing[options.easing];
+
+        for(var key in options.styles){
+          var val = options.styles[key];
+          var style = val;
+          if(_.isString(val)){
+              style = { endValue: val };
+          }
+          style = _.defaults(style, {
+              startValue: null,
+              endValue: null
+          });
+          //var dummy = $('<div style="position: fixed; left: 10000px;"></div>').appendTo('body');
+          if(style.startValue){
+              //Write to a fake element and read back because some browsers actually change the format.
+              //for example Chrome changes rotateX and rotateY into a transformation matrix.
+              //style.startValue = dummy.css(key, style.startValue).css(key);
+              // ^ Nevermind, it was screwing up rotation, as rotate(360) === rotate(0) when you get the matrix transform.
+              style.startValue = parseAttribute(style.startValue);
+          }
+          if(style.endValue){
+              //Write to a fake element and read back because some browsers actually change the format.
+              //for example Chrome changes rotateX and rotateY into a transformation matrix.
+              //style.endValue = dummy.css(key, style.endValue).css(key);
+              // ^ Nevermind, it was screwing up rotation, as rotate(360) === rotate(0) when you get the matrix transform.
+              style.endValue = parseAttribute(style.endValue);
+          }
+          //dummy.remove();
+          options.styles[key] = style;
+        }
+
         var scroll = function(){
             var start = options.start();
             var end = options.end();
             var pos = options.$scrollParent.scrollTop();
-            
+
             var value=0;
             if(pos < start && executionPoint >= 0){
                 value = 0;
@@ -497,23 +570,24 @@
                 value = 1;
             }else if(pos < start || pos > end){
                 executionPoint = (pos < start) ? -1 : 1;
-                return; 
+                return;
             } else{
                 var percent = (pos - start) / (end - start);
-                value = exports.easing[options.easing](percent);               
+                value = options.easing(percent);
             }
-            
+
             executionPoint = (pos < start) ? -1 : ( (pos > end) ? 1 : 0 );
 
             if(options.scroll){ options.scroll(value); }
-            _.each(options.styles, function(val, key){
-                if(typeof val.startValue === 'undefined' || val.startValue === null){
-                    val.startValue = parseAttribute(options.$el.css(key));
-                }
-                setStyle(options.$el, key, val.endValue.mix(val.startValue, 1 - value).toString());
-            });
+            for(var key in options.styles){
+              var val = options.styles[key];
+              if(typeof val.startValue === 'undefined' || val.startValue === null){
+                  val.startValue = parseAttribute(options.$el.css(key));
+              }
+              setStyle(options.$el, key, val.endValue.mix(val.startValue, 1 - value).toString());
+            }
         };
-        
+
         $(options.scrollParent).on('scroll', scroll);
 
         t.dispose = function(){
@@ -530,7 +604,7 @@
             attr: 'top',
             speed: 0
         };
-        
+
         _.defaults(options, defaults);
         if(options.$el === null){
             throw "Must specify an element or elements to tween";
@@ -541,16 +615,16 @@
             options.scrollParent = $el.scrollParent();
         }
         options.$scrollParent = $(options.scrollParent);
-        
+
         var triggerIdx = 0;
         var scroll = function(){
             var parentTop = (options.$scrollParent.get(0) === document) ? 0 : options.$scrollParent.offset().top;
             var pos = -( ($el.offsetParent().offsetParent().offset().top - parentTop)
                             - options.$scrollParent.scrollTop())
                        * options.speed;
-            $el.css(options.attr, Math.round(pos));            
+            $el.css(options.attr, Math.round(pos));
         };
-        
+
         options.$scrollParent.on('scroll', scroll);
         scroll();
         t.dispose = function(){
@@ -567,9 +641,9 @@
             axis: 'y',
             up: null,
             down: null
-        }  
-        
-       
+        }
+
+
         _.defaults(options, defaults);
         if(options.$el === null){
             options.$el = $(document);
@@ -579,7 +653,7 @@
             options.scrollParent = $el.scrollParent();
         }
         options.$scrollParent = $(options.scrollParent);
-        
+
         options.position = _.isFunction(options.position) ? options.position : makeOffsetFunction(options.axis, options.$el, options.position);
         t._lastScrollTop = options.$scrollParent.scrollTop();
         var scroll = function(){
@@ -593,14 +667,14 @@
             }
             t._lastScrollTop = scrollTop;
         };
-        
+
         $(options.scrollParent).on('scroll', scroll);
-        
+
         t.dispose = function(){
             $(options.scrollParent).off('scroll', scroll);
         };
     }
-    
+
 
     //
     // jQuery Plugins - Get their own scope
@@ -613,7 +687,7 @@
           this.each(function(idx, el){
              if(tweens[el]){
                 $.each(tweens[el], function(i2, item){
-                   item.dispose(); 
+                   item.dispose();
                 });
                 delete tweens[el];
              }
@@ -623,7 +697,7 @@
         this.each(function(idx, el){
             var opts = $.extend({}, options);
             opts.$el = $(el);
-            var tween = new scrollr.Tween(opts);
+            var tween = new scrollit.Tween(opts);
             tweens[el] = tweens[el] || [];
             tweens[el].push(tween);
         });
@@ -635,11 +709,11 @@
         this.each(function(idx, el){
             var opts = $.extend({}, options);
             opts.$el = $(el);
-            var way = new scrollr.Waypoint(opts);
+            var way = new scrollit.Waypoint(opts);
             waypoints[el] = waypoints[el] || [];
             waypoints[el].push(way);
         });
-    };    
+    };
 
     $.fn.parallax = function(options){
         this.each(function(idx, el){
@@ -647,7 +721,7 @@
             opts.$el = $(el);
             var parallax = new exports.Parallax(opts);
         });
-    };    
+    };
 
     $(document).ready(function(){
        $('[data-parallax]').each(function(idx, el){
@@ -658,4 +732,3 @@
     });
     return exports;
 }));
-

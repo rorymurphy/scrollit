@@ -11,7 +11,7 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width">
         <script type="text/javascript" src="external/jquery-1.8.3.min.js"></script>
         <script type="text/javascript" src="external/underscore.js"></script>
-        <script type="text/javascript" src="../src/scripts/scrollr.js"></script>
+        <script type="text/javascript" src="../src/scripts/scrollit.js"></script>
         
         <style>
             #first{
@@ -99,7 +99,7 @@ and open the template in the editor.
         </div>
         
         <script type="text/javascript">
-            var colorChanger = new scrollr.Tween({
+            var colorChanger = new scrollit.Tween({
                $el: $('#first'),
                start: 0,
                end: $('#second'),
@@ -109,7 +109,7 @@ and open the template in the editor.
                }
             });
             
-            var rotator = new scrollr.Tween({
+            var rotator = new scrollit.Tween({
                $el: $('#first .spin'),
                start: 0,
                end: $('#second'),
@@ -118,7 +118,7 @@ and open the template in the editor.
                }
             });
             
-            var textChanger = new scrollr.Tween({
+            var textChanger = new scrollit.Tween({
                $el: $('#first .blur'),
                start: 0,
                end: $('#second'),
@@ -130,7 +130,7 @@ and open the template in the editor.
             
             $('.parallax-me').parallax({speed: 0.5});
             
-            var slider = new scrollr.Waypoint({
+            var slider = new scrollit.Waypoint({
                $el: $('body'),
                position: function(){
                  return $('#third').position().top - $(window).height()/2;  
