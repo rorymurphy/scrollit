@@ -15,7 +15,9 @@ However, parallaxing DOM objects can cause redraw events which, depending on the
 browser, may make the experience sub-optimal. There are two ways to invoke
 parallax using ScrollIt. The first uses a declarative HTML data attribute.
 
+```html
   <div style="position: relative;" data-parallax="0.5">Some content...</div>
+```
 
 In this example, the element will move at 1/2 the scroll speed it normally would.
 It is important to note that, in order for parallaxing to work correctly, the
@@ -25,6 +27,7 @@ image, which is also commonly the target of parallax. To use more advanced
 options of this sort, we can call the parallax jQuery extension directly. This
 same call can be written as below:
 
+```html
   <div class="parallax-me" style="position: relative;">Some content...</div>
   <script type="text/javascript">
     $('.parallax-me').parallax({
@@ -33,6 +36,7 @@ same call can be written as below:
       speed: 0.5
     });
   </script>
+```
 
 The attributes available are
 
