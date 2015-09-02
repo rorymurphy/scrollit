@@ -51,8 +51,8 @@ speed | -infinity < speed < infinity | How much slower than normal scroll the ob
 Tweening is a technique that allows elements to be animated by specifying a start
 value, and end value and an easing function. The tweening engine can then
 animate the transition from one to the other. ScrollIt supports tweening on any
-CSS attribute that contains color or a number, and not just strictly numeric values (more on
-that in a sec). A tweening call looks like:
+color CSS attribute color (rgb, rgba, hsl or hsla) or any attribute that contains  or a number, and not just strictly numeric values (more on
+that in a minute). A tweening call looks like:
 
 ```html
   <div id="color-me"></div>
@@ -71,11 +71,11 @@ that in a sec). A tweening call looks like:
 
 So what is this tween doing? This particular tween is changing the
 background-color of the "color-me" div from it's start color (whatever that is
-based on the CSS, since no start value was specified) to $ff0000. It will do this
+based on the CSS, since no start value was specified) to #ff0000. It will do this
 from scroll position 0 (of the scrollParent element) until the top of the
 "#next-div" element reaches the top of the screen.
 
-Many of the options for a tween allow for different datatypes to be passed in
+Many of the options for a tween allow for a selection of datatypes to be passed in
 
 Option | Datatype | Common Values | Description
 ------ | -------- | ------------- | -----------
@@ -88,7 +88,7 @@ end | number | | same as start, but the position at which the tweening ends
     | function | | same as start, but the position at which the tweening ends
 easing | string | | The name of the easing function to use. ScrollIt provides the same easing functions as jQuery UI. See https://jqueryui.com/easing/ for more details.
        | function | | Specifies a custom easing function to use. The function must accept a single argument with a range from 0 (beginning) to 1 (end). Additionally, the functions return value should be 0 at point 0 and 1 at point 1, although it may go below 0 or above 1 in-between (see easeOutElastic as an example).
-styles | object | | The styles option accepts an object where the keys are the CSS attributes to tween and the values are either a) just the end value of the tween or b) a JavaScript object that contains start value and end value in the form 'background-color' : {startValue: '#000000', endValue: '#ffffff'}
+styles | object | | The styles option accepts an object where the keys are the CSS attributes to tween and the values are either a) just the end value of the tween or b) a JavaScript object that contains start value and end value in the form {'background-color' : {startValue: '#000000', endValue: '#ffffff'} }
 
 
 
@@ -105,7 +105,7 @@ Many more advanced options are available. For example:
          end: $('#next-div'),
          easing: 'easeInCubic',
          styles: {
-             'background-color': {startValue: '#ffffff', endValue: '#ff0000'}
+             'transform': {startValue: 'rotate(0deg)', endValue: 'rotate(720deg)'}
          }
       });
   </script>
@@ -115,4 +115,42 @@ This variation specifies the start using a function that returns a position at
 which the tween should begin. This is a very powerful way to control the
 space in which tweening should occur, and often desireable for responsive designs,
 where the pixel heights of elements change based on screen size. Also, in this
-example, both a start value and an end value are specified for the background-color.
+example, both a start value and an end value are specified, and the values are not
+strictly numeric. In this circumstance, ScrollIt tries to find the number within
+the two values and then tweens it, generating a string for 'rotate(10deg)',
+'rotate(90deg)', etc. for each point along the way.
+
+# Waypoints
+
+Waypoints are an easy way to specify that some action be taken when the scroll
+position reaches a certain point. The waypoint can be specified relative to any
+element, such as 100px above a particular element (even if that element is itself moving or changing size).
+At the same time, specifying the waypoint relative to the **document** element
+will yield a fixed position waypoint. The basic syntax to invoke a waypoint is
+
+```html
+  <img id="someimage" src="..." />
+  <script type="text/javascript">
+    $(document).waypoint({
+       position: 500,
+       down: function(){
+           var img = $('#someimage');
+           img.slideDown();
+       },
+       up: function(){
+           var img = $('#someimage');
+           img.slideUp();
+       }
+
+    });
+  </script>
+```
+
+From this example, we can see that the primary options to provide are a **position**, and a **down**
+method and/or an **up** method. Like most options in ScrollIt, the position option can be either a value
+or a function that returns a position value.
+
+# Sample
+
+The ScrollIt repo includes a test directory that contains a very simple (and
+ugly) demonstration of many of the core features.
