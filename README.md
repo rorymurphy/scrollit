@@ -81,9 +81,11 @@ Option | Datatype | Common Values | Description
 ------ | -------- | ------------- | -----------
 axis | string | 'y' or 'x' | Tweening can be done in either the vertical or horizontal scroll directions
 start | number | | When a number is specified, it refers to the absolute scroll position relative to the scrollParent.
+      | string | 'top', 'bottom', 'left' or 'right' | The start value will be set to the appropriate edge of the scrollParent
       | jQuery object | | The start value will be set to the Top (y-axis) or Left (x-axis) of the first element in the jQuery set
       | function | | An arbitrary function can be provided that will return the numeric value for the start. This function is reevaluated on each scroll event, so the start value can be dynamic when a function is provided
 end | number | | same as start, but the position at which the tweening ends
+    | string | 'top', 'bottom', 'left' or 'right' | The start value will be set to the appropriate edge of the scrollParent
     | jQuery object | | same as start, but the position at which the tweening ends
     | function | | same as start, but the position at which the tweening ends
 easing | string | | The name of the easing function to use. ScrollIt provides the same easing functions as jQuery UI. See https://jqueryui.com/easing/ for more details.
@@ -149,6 +151,17 @@ will yield a fixed position waypoint. The basic syntax to invoke a waypoint is
 From this example, we can see that the primary options to provide are a **position**, and a **down**
 method and/or an **up** method. Like most options in ScrollIt, the position option can be either a value
 or a function that returns a position value.
+
+Option | Datatype | Common Values | Description
+------ | -------- | ------------- | -----------
+axis | string | 'y' or 'x' | Waypoints can be set on either the vertical or horizontal scroll directions
+position | number | | The scroll position at which to trigger the waypoint
+    | string | 'top', 'bottom', 'left' or 'right' | The start value will be set to the appropriate edge of the scrollParent
+    | function | | A function that returns a position at which to trigger the waypoint. This is particularly powerful when you want to set a waypoint relative to a (potentially dynamic) element.
+down | function | | A function to trigger when the waypoint is passed moving downward
+up | function | | A function to trigger when the waypoint is passed moving upward
+right | function | | A function to trigger when the waypoint is passed moving to the right
+left | function | | A function to trigger when the waypoint is passed moving to the left
 
 # Sample
 

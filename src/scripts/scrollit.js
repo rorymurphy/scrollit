@@ -659,13 +659,24 @@
         var scroll = function(){
             var position = options.position();
             var scrollTop = options.$scrollParent.scrollTop();
-            if(t._lastScrollTop < position && scrollTop > position && options.down){
+            var scrollLeft = options.$scrollParent.scrollLeft();
+
+            if(options.axis === 'y' && t._lastScrollTop < position && scrollTop > position && options.down){
                 options.down();
             }
-            if(t._lastScrollTop > position && scrollTop < position && options.up){
+            if(options.axis === 'y' && t._lastScrollTop > position && scrollTop < position && options.up){
                 options.up();
             }
+
+            if(options.axis === 'x' && t._lastScrollLeft < position && scrollLeft > position && options.right){
+                options.right();
+            }
+            if(options.axis === 'x' && t._lastScrollLeft > position && scrollLeft < position && options.left){
+                options.left();
+            }
+
             t._lastScrollTop = scrollTop;
+            t._lastScrollLeft = scrollLeft;
         };
 
         $(options.scrollParent).on('scroll', scroll);
