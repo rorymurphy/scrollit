@@ -413,7 +413,6 @@
         };
 
         t.toString = function(){
-            var t=this;
             return stringFormat('rgba({0}, {1}, {2}, {3})', Math.round(options.r), Math.round(options.g), Math.round(options.b), options.a);
         }
 
@@ -638,7 +637,6 @@
         }
         options.$scrollParent = $(options.scrollParent);
 
-        var triggerIdx = 0;
         var scroll = function(){
             var parentTop = (options.$scrollParent.get(0) === document) ? 0 : options.$scrollParent.offset().top;
             var pos = -( ($el.offsetParent().offsetParent().offset().top - parentTop)
@@ -656,7 +654,6 @@
 
     exports.Waypoint = function(options){
         var t = this;
-        var havePassed=false;
         var defaults = {
             position: 0,
             scrollParent: null,
