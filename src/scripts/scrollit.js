@@ -610,7 +610,9 @@
         };
 
         $(options.scrollParent).on('scroll', scroll);
-
+        scroll();
+        $(document).on('ready', scroll);
+        
         t.dispose = function(){
             $(options.scrollParent).off('scroll', scroll);
         };
@@ -638,15 +640,26 @@
         options.$scrollParent = $(options.scrollParent);
 
         var scroll = function(){
-            var parentTop = (options.$scrollParent.get(0) === document) ? 0 : options.$scrollParent.offset().top;
-            var pos = -( ($el.offsetParent().offsetParent().offset().top - parentTop)
-                            - options.$scrollParent.scrollTop())
+            var parentBound, offsetBound, scrollBound;
+            if(options.axis == 'x'){
+              parentBound = (options.$scrollParent.get(0) === document) ? 0 : options.$scrollParent.offset().left;
+              offsetBound = $el.offset().left;
+              scrollBound = options.$scrollParent.scrollLeft();
+            }else{
+              parentBound = (options.$scrollParent.get(0) === document) ? 0 : options.$scrollParent.offset().top;
+              offsetBound = $el.offset().top;
+              scrollBound = options.$scrollParent.scrollTop();
+            }
+
+            var pos = -( (offsetBound - parentBound)
+                            - scrollBound)
                        * options.speed;
             $el.css(options.attr, Math.round(pos));
         };
 
         options.$scrollParent.on('scroll', scroll);
         scroll();
+        $(document).on('ready', scroll);
         t.dispose = function(){
             options.$scrollParent.off('scroll', scroll);
         };
@@ -699,7 +712,8 @@
         };
 
         $(options.scrollParent).on('scroll', scroll);
-
+        scroll();
+        $(document).on('ready', scroll);
         t.dispose = function(){
             $(options.scrollParent).off('scroll', scroll);
         };
