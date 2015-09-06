@@ -645,17 +645,32 @@
         var scroll = function(){
             var parentBound, offsetBound, scrollBound;
             if(options.axis == 'x'){
-              parentBound = (options.$scrollParent.get(0) === document) ? 0 : options.$scrollParent.offset().left;
-              offsetBound = $el.offset().left;
-              scrollBound = options.$scrollParent.scrollLeft();
+              parentPos = (options.$scrollParent.get(0) === document) ? 0 : options.$scrollParent.offset().left;
+              //We need the position of where the element SHOULD be, not where it IS (since this includes parallaxing)
+              offsetPos = $el.offset().left;
+              if(options.attr === 'left'){
+                var left = $el.css('left');
+                offsetPos -= ($.isNumeric(left) ? left : 0);
+              }else if(options.attr === 'right'){
+                var right = $el.css('right');
+                offsetPos += ($.isNumeric(right) ? right : 0);
+              }
+
+              scrollPos = options.$scrollParent.scrollLeft();
             }else{
-              parentBound = (options.$scrollParent.get(0) === document) ? 0 : options.$scrollParent.offset().top;
-              offsetBound = $el.offset().top;
-              scrollBound = options.$scrollParent.scrollTop();
+              parentPos = (options.$scrollParent.get(0) === document) ? 0 : options.$scrollParent.offset().top;
+              offsetPos = $el.offset().top;
+              if(options.attr === 'top'){
+                  var top = $el.css('top');
+                  offsetPos -= ($.isNumeric(top) ? top : 0);
+              }else if(options.attr === 'bottom'){
+                  var bottom = $el.css('bottom');
+                  offsetPos += ($.isNumeric(bottom) ? bottom : 0);
+              }
+              scrollPos = options.$scrollParent.scrollTop();
             }
 
-            var pos = -( (offsetBound - parentBound)
-                            - scrollBound)
+            var pos = -( offsetPos - parentPos - scrollPos)
                        * options.speed;
             $el.css(options.attr, Math.round(pos));
         };
