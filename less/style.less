@@ -1,0 +1,160 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/*
+    Created on : Mar 1, 2014, 7:25:54 PM
+    Author     : Rory
+*/
+//@import url(http://fonts.googleapis.com/css?family=Lato);
+@import url(http://fonts.googleapis.com/css?family=Varela+Round);
+//@import url(http://fonts.googleapis.com/css?family=Signika+Negative);
+@import url(http://fonts.googleapis.com/css?family=Varela);
+
+@import "font-awesome/font-awesome.less";
+@import "bootstrap/bootstrap.less";
+@import "scrollr.less";
+@import "overrides.less";
+
+body{
+    background-color: @black;
+}
+
+h2{
+    margin-top: 0;
+}
+.slide {
+    position: relative;
+    text-align: center;
+    &.slide-intro {
+        background: black url("../img/concert_1280x852.jpg") no-repeat fixed;
+        background-size: cover;
+
+        .slide-inner {
+            padding-top: 300px;
+
+            img{
+                width: 80%;
+                max-width: 920px;
+            }
+        }
+    }
+
+    &.slide-social {
+        overflow: hidden;
+        .slide-inner{
+            padding-top: 300px;
+            ul.social-links{
+                list-style-type: none;
+                margin-top: 100px;
+                li{
+                    display:inline;
+                    a i{
+                        .icon;
+                        color: @white;
+                        font-size: 50px;
+                    }
+                }
+            }
+        }
+    }
+
+    &.slide-touch {
+        background: @white url("../img/sky.jpg") no-repeat fixed;
+        background-size: cover;
+        color: @white;
+        .slide-inner {
+
+            h2{
+                padding-top: 500px;
+                position: relative;
+
+                .part1, .part2{
+                    position: relative;
+                }
+
+            }
+        }
+    }
+
+    &.slide-reveal {
+        background-color: @black;
+        .slide-inner{
+            padding-top: 300px;
+            padding-bottom: 300px;
+/*            h2{
+                text-shadow: 0 0 10px rgba(0,0,0,0.5);
+            }*/
+        }
+    }
+
+    &.slide-window {
+        .slide-inner{
+            .img-city-wrapper{
+                position: absolute;
+                left: 331/1280 * 100%;
+                top: 173/848 * 100%;
+                width: 597/1280 * 100%;
+                height: 495/848 * 100%;
+                overflow: hidden;
+
+                -ms-transform: skew(0.5deg,0deg); /* IE 9 */
+                -moz-transform: skew(0.5deg,0deg);
+                -webkit-transform: skew(0.5deg,0deg); /* Chrome, Safari, Opera */
+                transform: skew(0.5deg,0deg);
+                .img-city-inner{
+                    position: relative;
+                    left: 0;//-331/597 * 100%;
+                    top: -173/495 * 100%;
+                    //width: 680/597 * 100%;
+                    height: 848/495 * 100%;
+                    min-height: 100%;
+                    img {
+                        min-height: 100%;
+                        width: auto;
+                        min-width: 100%;
+                    }
+                }
+/*                position:absolute;
+                width: 100%;
+                max-height: 100%;
+                z-index: -1;*/
+
+                img{
+                    width: 100%;
+                    //max-height: 100%;
+                }
+            }
+            img.img-window{
+                width: 100%;
+                height: 100%;
+            }
+            h2{
+                position: absolute;
+                bottom: 0;
+                width: 100%;
+                text-align:center;
+                transform: rotateY(270deg);
+                -webkit-transform: rotateY(270deg);
+                -moz-transform: rotateY(270deg);
+                -ms-transform: rotateY(270deg);
+            }
+        }
+    }
+
+    &.slide-last{
+        background: url("../img/people-blurred_1280x853.jpg") no-repeat;
+        background-size: cover;
+        //background-attachment: fixed;
+        color: @gray-dark;
+        h2{
+            padding-top: 300px;
+            font-weight: bold;
+        }
+    }
+}
+
+.copyright{
+  font-size: 12px;
+}

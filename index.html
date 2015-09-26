@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Xintricity Web Platform</title>
+        <link rel="stylesheet" href="css/style.css"/>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <script type="text/javascript" src="scripts/jquery-1.9.1.min.js"></script>
+        <script type="text/javascript" src="scripts/jquery-migrate-1.2.1.min.js"></script>
+        <script type="text/javascript" src="scripts/underscore.js"></script>
+        <script type="text/javascript" src="scripts/scrollit.js"></script>
+        <script type="text/javascript" src="scripts/slides.js"></script>
+    </head>
+    <body>
+        <div class="slide slide-intro full-height">
+            <div class="slide-inner">
+                <img src="img/scrollit-banner.png" alt="Xintricity"/>
+            </div>
+        </div>
+        <div class="slide slide-social">
+            <div class="slide-inner">
+                <div class="parallax-wrapper">
+                    <div class="parallax-inner" data-parallax="0.7">
+                        <h2>You can start with a little parallax</h2>
+                    </div>
+                </div>
+                <div class="parallax-wrapper">
+                    <div class="parallax-inner" data-parallax="0.65">
+                        <ul class="social-links">
+                            <li><a href="https://www.facebook.com/sharer/sharer.php?u={{url}}&t={{title}}&p[summary]={{Path='model.post_excerpt', Filter='Filter.urlEncode'}}" target="_blank" rel="noFollow"><i class="icon-facebook-square"></i></a></li>
+                            <li><a href="https://twitter.com/share?url={{url}}&counturl={{url}}&text={{title}}&via=ndmurph04" target="_blank" rel="noFollow" onclick="window.open(this.href,'twitterpopup','height=500,width=800,scrollbars=1'); event.returnValue=false; return false;"><i class="icon-twitter-square"></i></a></li>
+                            <li><a href="http://www.linkedin.com/shareArticle?mini=true&url={{url}}&title={{title}}&summary={{excerpt}}" target="_blank" rel="noFollow"><i class="icon-linkedin-square"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide slide-touch full-height">
+            <div class="slide-inner">
+                <h2><span class="part1">Or even</span><span class="part2"> make text fly</span></h2>
+            </div>
+        </div>
+        <div class="slide slide-reveal">
+            <div class="slide-inner">
+                <div class="parallax-wrapper">
+                    <div class="parallax-inner" data-parallax="-0.2">
+                        <h2>It's great for the big unveil</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide slide-window full-height">
+            <div class="slide-inner">
+                <img class="img-window" src="img/window-1280x848.jpg" alt="window"/>
+                <div class="img-city-wrapper">
+                    <div class="img-city-inner">
+                        <div class="parallax-wrapper">
+                            <div class="parallax-inner" data-parallax="0.3">
+                                <img class="img-city" src="img/time-sqaure_680x853.jpg" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h2>Or for a window to the world</h2>
+            </div>
+        </div>
+        <div class="slide slide-last full-height">
+            <div class="slide-inner">
+                <h2>Grow your website with ScrollIt</h2>
+                <h4><a href="https://github.com/rorymurphy/scrollit">https://github.com/rorymurphy/scrollit</a></h4>
+            </div>
+            <div class="copyright">
+              <p>&copy; Rory Murphy 2015</p>
+              <p>Several images used under license from Shutterstock</p>
+            </div>
+        </div>
+
+        <!--GitHub banner -->
+        <a href="https://github.com/you"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
+
+        <script type="text/javascript">
+            (function(){
+                var cont = $('.slide.slide-touch');
+                var $el = $('.slide.slide-touch h2 .part1');
+//                $el.tween({
+//                    start: function(){
+//                        return cont.offset().top - $(window).height() / 2;
+//                    },
+//                    end: cont,
+//                    easing: 'Linear',
+//                    styles: {
+//                       'transform': {startValue: 'rotate(0deg)', 'endValue': 'rotate(360deg)'},
+//                       'left': {startValue: (($(window).width() + $el.width())/2).toString() + 'px', endValue: '0px' }
+//                    }
+//                });
+                $el.tween({
+                    start: function(){
+                        return cont.offset().top - $(window).height() / 2;
+                    },
+                    end: cont,
+                    easing: 'easeInCubic',
+                    styles: {
+                       'left': { startValue: $(window).width() * -0.75 + 'px', endValue: "0px"}
+                    }
+                });
+                var $el = $('.slide.slide-touch h2 .part2');
+                $el.tween({
+                    start: function(){
+                        return cont.offset().top - $(window).height() / 2;
+                    },
+                    end: cont,
+                    easing: 'easeInCubic',
+                    styles: {
+                       'left': { startValue: $(window).width() * 0.75 + 'px', endValue: "0px"}
+                    }
+                });
+            }());
+
+            (function(){
+                var cont = $('.slide.slide-reveal');
+                var $el = $('.slide.slide-reveal h2');
+                cont.tween({
+                    start: function(){
+                        return $el.offset().top - $(window).height()/1.5;
+                    },
+                    end: function(){
+                        return $el.offset().top - $(window).height()/4;
+                    },
+                    easing: 'Linear',
+                    styles: {
+                       'background-color': {startValue: '#ffffff', endValue: '#000000'},
+                    }
+                });
+
+                $el.tween({
+                    start: function(){
+                        return $el.offset().top - $(window).height()/2;
+                    },
+                    end: function(){
+                        return $el.offset().top;
+                    },
+                    easing: 'easeInCubic',
+                    styles: {
+                       'color': { startValue: 'rgba(255,255,255,0.0)', endValue: 'rgba(255,255,255,1.0)'},
+                       'text-shadow': {startValue: '0 0 20px rgba(255,255,255,0.7)', endValue: '0 0 0px rgba(255,255,255,0.0)'},
+                    }
+                });
+            }());
+
+            (function(){
+                var $el = $('.slide-window h2');
+                $el.waypoint({
+                    position: function(){
+                        return $el.offset().top - $(window).height()/2;
+                    },
+                    down: function(){
+                        $el.animate(
+                            {'background-position-x': 270},
+                            {
+                                duration: 500,
+                                step: function(now, tween){
+                                    var val = 'rotateY(' + (now - 270) + 'deg)';
+                                    $el.css({
+                                        'transform': val,
+                                        '-webkit-transform': val,
+                                        '-moz-transform': val,
+                                        '-ms-transform': val
+                                    });
+                                }
+                        });
+                    }
+                });
+            }());
+
+            (function(){
+                var $el = $('.slide-last h2');
+                $el.tween({
+                    start: function(){
+                        return $el.offset().top - $(window).height()/2;
+                    },
+                    end: function(){
+                        return $el.offsetParent().offset().top;
+                    },
+                    easing: 'Linear',
+                    styles: {
+                       'font-size': { startValue: parseInt($el.css('font-size')) / 3 + 'px', endValue: $el.css('font-size')},
+                    }
+                });
+
+                $('.slide-last').parallax({
+                  attr: 'background-position-y',
+                  speed: 0.8
+                });
+            }());
+        </script>
+    </body>
+</html>
