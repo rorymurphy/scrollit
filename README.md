@@ -1,7 +1,7 @@
 # ScrollIt
 ###Simple scroll animations including Parallax, Tweening and Waypoints
 
-**Project page: https://github.com/rorymurphy/scrollit**
+**Demo page: http://rorymurphy.github.io/scrollit/**
 
 **ScrollIt** is a client-side JavaScript library that provides easy to use
 jQuery extensions for implementing common scroll based animations, as well as
