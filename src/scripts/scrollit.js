@@ -194,20 +194,29 @@
     //
     function setStyleBrowser($el, name, value, browsers){
         $el.css(name, value);
+
         for(var i = 0; i < browsers.length; i ++){
            var b = browsers[i];
            switch(b){
                case 'webkit':
-                   $el.css('-webkit-' + name, value);
+                   for(var i = 0; i < $el.length; $i++){
+                     $el[i].style['-webkit-' + name] = value;
+                   }
                    break;
                case 'mozilla':
-                   $el.css('-moz-' + name, value);
+                   for(var i = 0; i < $el.length; $i++){
+                     $el[i].style['-moz-' + name] = value;
+                   }
                    break;
                case 'ie':
-                   $el.css('-ms-' + name, value);
+                   for(var i = 0; i < $el.length; $i++){
+                     $el[i].style['-ms-' + name] = value;
+                   }
                    break;
                case 'opera':
-                   $el.css('-o-' + name, value);
+                   for(var i = 0; i < $el.length; $i++){
+                     $el[i].style['-o-' + name] = value;
+                   }
                    break;
            }
         }
@@ -612,12 +621,15 @@
             }
         };
 
-        $(options.scrollParent).on('scroll', scroll);
-        scroll();
-        $(document).on('ready', scroll);
+        var animate = function(){
+          window.requestAnimationFrame(scroll);
+        };
+        $(options.scrollParent).on('scroll', animate);
+        animate();
+        $(document).on('ready', animate);
 
         t.dispose = function(){
-            $(options.scrollParent).off('scroll', scroll);
+            $(options.scrollParent).off('scroll', animate);
         };
     };
 
@@ -675,11 +687,14 @@
             $el.css(options.attr, Math.round(pos));
         };
 
-        options.$scrollParent.on('scroll', scroll);
-        scroll();
-        $(document).on('ready', scroll);
+        var animate = function(){
+          window.requestAnimationFrame(scroll);
+        };
+        options.$scrollParent.on('scroll', animate);
+        animate();
+        $(document).on('ready', animate);
         t.dispose = function(){
-            options.$scrollParent.off('scroll', scroll);
+            options.$scrollParent.off('scroll', animate);
         };
     };
 
@@ -729,11 +744,14 @@
             t._lastScrollLeft = scrollLeft;
         };
 
-        $(options.scrollParent).on('scroll', scroll);
-        scroll();
-        $(document).on('ready', scroll);
+        var animate = function(){
+          window.requestAnimationFrame(scroll);
+        };
+        $(options.scrollParent).on('scroll', animate);
+        animate();
+        $(document).on('ready', animate);
         t.dispose = function(){
-            $(options.scrollParent).off('scroll', scroll);
+            $(options.scrollParent).off('scroll', animate);
         };
     }
 
