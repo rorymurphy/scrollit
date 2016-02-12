@@ -1,5 +1,7 @@
 var gulp = require('gulp'),
     uglify = require('gulp-uglify'),
+    concat = require('gulp-concat'),
+    less = require('gulp-less'),
     del = require('del'),
     addsrc = require('gulp-add-src');
 
@@ -10,14 +12,24 @@ gulp.task('clean', function (cb) {
     //  notify gulp when this task is complete.
     //  Without the callback, gulp will attempt to proceed with the
     //  next task before the del function is actually done delete the files.
-    del(['dist/css/scrollit.css', 'dist/scripts/scrollit.min.js'], cb);
+    del.sync(['dist/css/scrollit.css', 'dist/scripts/scrollit.min.js']);
+    cb();
 });
 
-gulp.task('compress', ['clean'], function() {
-  return gulp.src('./scrollit/scripts/scrollit.js')
+gulp.task('compress-js', ['clean'], function() {
+  return gulp.src('./src/scripts/scrollit.js')
   .pipe(uglify({
     mangle: false
   }))
   .pipe(addsrc.prepend('license.txt'))
+  .pipe(concat('scrollit.min.js'))
   .pipe(gulp.dest('./dist/scripts/'));
 });
+
+gulp.task('compress-css', ['clean'], function(){
+  return gulp.src('./src/less/scrollit.less')
+    .pipe(less())
+    .pipe(gulp.dest('./dist/css/'));
+});
+
+gulp.task('default', ['clean', 'compress-js', 'compress-css']);
